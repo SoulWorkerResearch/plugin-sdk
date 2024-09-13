@@ -2,13 +2,14 @@
 
 #include <filesystem>
 #include <format>
+#include <fmt/format.h>
 
 template<>
-struct std::formatter<std::filesystem::directory_entry> : std::formatter<std::string>
+struct std::formatter<std::filesystem::directory_entry> : formatter<std::string>
 {
-	template <typename FormatContext>
-	auto format(const std::filesystem::directory_entry& _value, FormatContext& _context) -> decltype(_context.out())
-	{
-		return std::formatter<std::string>::format(_value.path().string(), _context);
-	}
+    auto format(const std::filesystem::directory_entry& _value, format_context& ctx) const -> decltype(ctx.out())
+    {
+        return format_to(ctx.out(), "{}", _value.path().string());
+    }
 };
+

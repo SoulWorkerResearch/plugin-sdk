@@ -2,18 +2,13 @@
 
 #include "../version.hpp"
 #include <format>
+#include <fmt/format.h>
 
 template<>
-struct std::formatter<swpsdk::version>
+struct std::formatter<swpsdk::version> : formatter<std::string>
 {
-    constexpr auto parse(format_parse_context& _context) -> decltype(_context.end())
+    auto format(const swpsdk::version& _value, format_context& ctx) const -> decltype(ctx.out())
     {
-        return _context.end();
-    }
-
-    template <typename FormatContext>
-    auto format(const swpsdk::version& _value, FormatContext& _context) -> decltype(_context.out())
-    {
-        return std::format_to(_context.out(), "{}.{}.{}.{}", _value.major, _value.minor, _value.patch, _value.build);
+        return format_to(ctx.out(), "{}.{}.{}.{}", _value.major, _value.minor, _value.patch, _value.build);
     }
 };
